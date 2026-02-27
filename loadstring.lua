@@ -114,7 +114,7 @@ ToggleHatch:OnChanged(function()
         task.spawn(function()
             while getgenv().AutoHatch do
                 pcall(function() AutoHatchEvent:FireServer("Egg_3_1", 3) end)
-                task.wait(1)
+                task.wait(0.1)
             end
         end)
     end
