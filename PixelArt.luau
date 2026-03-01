@@ -54,7 +54,7 @@ local function tpToBlock()
             
         if targetModel and targetModel:IsA("Model") then
 
-            character.HumanoidRootPart.CFrame = targetModel:GetPivot() * CFrame.new(0, 10, 0)
+            character.HumanoidRootPart.CFrame = targetModel:GetPivot() * CFrame.new(0, 50, 0)
         end
     end
 end
