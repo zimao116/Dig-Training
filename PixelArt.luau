@@ -308,15 +308,15 @@ ConfigUI:Init()
 local AutoLoadFileName = "AFK"
 
 task.spawn(function()
-    task.wait(1)
+    task.wait(0.5)
 
     VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Escape, false, game)
     VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Escape, false, game)
-    task.wait(1)
+    task.wait(0.5)
         
     VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.R, false, game)
     VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.R, false, game)
-    task.wait(1)
+    task.wait(0.5)
         
     VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, game)
     VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, game)
