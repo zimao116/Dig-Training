@@ -46,15 +46,21 @@ end
 
 local function tpToBlock()
     local character = player.Character
-    if character and character:FindFirstChild("HumanoidRootPart") then
-        local targetModel = workspace:FindFirstChild("Areas")
-            and workspace.Areas:FindFirstChild("Area_3")
-            and workspace.Areas.Area_3:FindFirstChild("Blocks")
-            and workspace.Areas.Area_3.Blocks:FindFirstChild("Block_3_1")
-            
-        if targetModel and targetModel:IsA("Model") then
-
-            character.HumanoidRootPart.CFrame = targetModel:GetPivot() * CFrame.new(0, 20, 0)
+    local selectedName = getgenv().SelectedBlock
+    if character and character:FindFirstChild("HumanoidRootPart") and selectedName then
+        local targetBlock = nil
+        for _, area in ipairs(workspace.Areas:GetChildren()) do
+            local blocksFolder = area:FindFirstChild("Blocks")
+            if blocksFolder then
+                local found = blocksFolder:FindFirstChild(selectedName)
+                if found then
+                    targetBlock = found
+                    break
+                end
+            end
+        end
+        if targetBlock and targetBlock:IsA("Model") then
+            character.HumanoidRootPart.CFrame = targetBlock:GetPivot() * CFrame.new(0, 10, 0)
         end
     end
 end
@@ -101,14 +107,26 @@ local FarmSection = MainTab:DrawSection({
     Position = 'left'   
 });
 
+getgenv().SelectedBlock = nil
+
+FarmSection:AddDropdown({
+	Name = "Select Area(TP)",
+	Default = "",
+	Flag = "Single_SelectArea",
+	Values = {"Block_1_1","Block_2_1","Block_3_1","Block_Fruit_1"},
+	Callback = function(Value)
+        getgenv().SelectedBlock = Value
+    end
+})
+
 getgenv().DigWait = 1
 
 FarmSection:AddSlider({
     Name = "Wait",
-    Min = 1,
+    Min = 0.1,
     Max = 100,
     Default = 1,
-    Round = 0,
+    Round = 1,
     Flag = "Slider_DigWait",
     Callback = function(Value)
         getgenv().DigWait = Value
@@ -225,6 +243,18 @@ local HatchSection = MainTab:DrawSection({
     Position = 'Left'   
 });
 
+getgenv().SelectedEgg = nil
+
+HatchSection:AddDropdown({
+	Name = "Select Egg",
+	Default = "",
+	Flag = "Single_SelectEgg",
+	Values = {"Egg_1_1","Egg_1_2","Egg_1_3","Egg_2_1","Egg_2_2","Egg_2_3","Egg_3_1","Egg_3_2","Egg_3_3","Egg_Fruit_1","Egg_Fruit_2","Egg_Fruit_3"},
+	Callback = function(Value)
+        getgenv().SelectedEgg = Value
+    end
+})
+
 getgenv().HatchSpeed = 0.1
 
 HatchSection:AddSlider({
@@ -250,7 +280,7 @@ local Toggle = HatchSection:AddToggle({
         if state == true then
             task.spawn(function()
                 while getgenv().AutoHatch do
-                    AutoHatchEvent:FireServer("Egg_3_1",3)
+                    AutoHatchEvent:FireServer(getgenv().SelectedEgg,3)
                     task.wait(getgenv().HatchSpeed)
                 end
             end)
